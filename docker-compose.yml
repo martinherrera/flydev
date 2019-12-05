@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  flydevtestdb:
+    image: mariadb
+    container_name: flydevtestdb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+    ports:
+      - "3306:3306"
+  flydevtestapp:
+    build: ./docker/laravel/
+    container_name: flydevtestapp
+    working_dir: /app
+    depends_on:
+      - flydevtestdb
+    volumes:
+      - ./app:/app/
+    links:
+      - flydevtestdb
+    stdin_open: true
+    tty: true
+    ports:
+      - "8000:8000"
+      - "8080:8080"
